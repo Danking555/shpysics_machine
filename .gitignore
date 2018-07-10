@@ -1,3 +1,6 @@
+TEST/
+Debug/
+Release/
 shpysics/Release/
 shpysics/Debug/
 .vs/
