@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "shphysics", "shphysics\shph
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TEST", "TEST\TEST.vcxproj", "{9D4F61EA-5151-4C73-A3F7-79429C5F6142}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test2", "test2\test2.vcxproj", "{33975842-D62F-4805-9AFA-C94AA22DFE65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -31,6 +33,14 @@ Global
 		{9D4F61EA-5151-4C73-A3F7-79429C5F6142}.Release|x64.Build.0 = Release|x64
 		{9D4F61EA-5151-4C73-A3F7-79429C5F6142}.Release|x86.ActiveCfg = Release|Win32
 		{9D4F61EA-5151-4C73-A3F7-79429C5F6142}.Release|x86.Build.0 = Release|Win32
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Debug|x64.ActiveCfg = Debug|x64
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Debug|x64.Build.0 = Debug|x64
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Debug|x86.ActiveCfg = Debug|Win32
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Debug|x86.Build.0 = Debug|Win32
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Release|x64.ActiveCfg = Release|x64
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Release|x64.Build.0 = Release|x64
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Release|x86.ActiveCfg = Release|Win32
+		{33975842-D62F-4805-9AFA-C94AA22DFE65}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

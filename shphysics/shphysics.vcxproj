@@ -122,10 +122,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Car.cpp" />
+    <ClCompile Include="CarsGame.cpp" />
+    <ClCompile Include="copy.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="shphysics.cpp">
       <SubType>
       </SubType>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Car.h" />
+    <ClInclude Include="CarsGame.h" />
+    <ClInclude Include="GameEngine.h" />
+    <ClInclude Include="Helper.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
