@@ -24,14 +24,22 @@ public:
 		return ret;
 	}
 
-	// Physics stuff
-	static float getMetersTraveledForTime(float time_delta, float v_before, float v_after)
+	static Sprite loadImageToSprite(string path)
 	{
-		return time_delta * (v_before + (v_before + v_after) / 2);
+		Sprite ret;
+		ret.setTexture(Helper::loadTextureFromFile(path));
+		return ret;
 	}
 
 	// Physics stuff
-	static float getMetersTraveledForTime(float time_delta, Vector2f v_before, Vector2f v_after)
+	static float getMetersTraveledForLoopCycle(float v_before, float v_after)
+	{
+		// time is not used because of very fast computer cycles that make delta time very low and travel zero
+		return (v_before + (v_before + v_after) / 2);
+	}
+
+	// Physics stuff
+	static float getMetersTraveledForLoopCycle(Vector2f v_before, Vector2f v_after)
 	{
 		return sqrt(pow(v_after.x - v_before.x, 2) + pow(v_after.y - v_after.x,2));
 	}
@@ -43,6 +51,7 @@ public:
 
 	static float getAcceleration(float time_delta, float before, float after)
 	{
+		time_delta = 1; // Because time cycles are very slow
 		return (after - before) / time_delta;
 	}
 

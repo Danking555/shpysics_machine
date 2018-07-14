@@ -2,14 +2,14 @@
 
 
 
-Car::Car(String path, Vector2f position, float dir_alpha, float max_speed, float acceleration = 1)
+Car::Car(String path, Vector2f position, float dir_alpha, float max_speed, float acceleration, float friction)
 {
-
-	_sprite.setTexture(Helper::loadTextureFromFile(path));
+	_texture = Helper::loadTextureFromFile(path);
+	_sprite.setTexture(_texture);	
 	_position = position;
+	updateSpriteByPosition();
 	_dir_alpha = dir_alpha;
 	_max_speed = max_speed;
-	_current_speed = 0;
 	_meters_traveled = 0;
 	_acceleration = acceleration;
 	rev = false;
@@ -29,24 +29,25 @@ Car::~Car()
 
 void Car::changeDirectionOrDecreaseSpeed()
 {
-	if (!_current_speed) // Change from R to D 
+	if (!getCurrentSpeedAproximately()) // Change from R to D 
 	{
 		_dir_alpha += M_PI; // Change direction to be forward
-		_current_speed += _acceleration; // accelerate as expected
+		updateVelocityUp(); // accelerate as expected
 		rev = !rev;
 		cout << rev << endl;
 	}
-	else if ((_current_speed - _acceleration) <= 0) _current_speed = 0;
-	else  _current_speed -= _acceleration; // Try to stop from reverse
+	else if (!zeroVelocity())
+		updateVelocityDown(); // Try to stop from reverse
 
 }
+
 
 void Car::increaseSpeed()
 {
 
-	if (_current_speed + _acceleration > _max_speed)
+	if (!shouldAccelerate())
 		cout << "Can't move faster than speed limit" << endl;
-	else _current_speed += _acceleration;
+	else updateVelocityUp();
 }
 
 
@@ -62,43 +63,90 @@ void Car::SpeedDown()
 	else changeDirectionOrDecreaseSpeed();
 }
 
+void Car::updateVelocityUp()
+{
+	_velocity.x += cos(_dir_alpha)*_acceleration;
+	_velocity.y += sin(_dir_alpha)*_acceleration;
+}
 
+
+void Car::updateVelocityDown()
+{
+	if (_velocity.x) // This velocity could be zerod before
+		_velocity.x -= cos(_dir_alpha)*_acceleration;
+	if (_velocity.y) // This velocity could be zerod before
+		_velocity.y -= sin(_dir_alpha)*_acceleration;
+}
+
+bool Car::zeroVelocity()
+{
+
+	if(!carStopped() && getCurrentSpeedAproximately() < _friction)
+	//if (_velocity.x < _friction && _velocity.y < _friction)
+	{
+		_velocity.x = 0;
+		_velocity.y = 0;
+		cout << "zeroed" << endl;
+		return true;
+	}
+	return false;
+}
+
+bool Car::shouldAccelerate()
+{
+	return ((getCurrentSpeedAproximately() + _acceleration) < _max_speed);
+}
 
 void Car::changeCarsSpeed(int keyboard_result_code)
 {
+
 	if (keyboard_result_code == Keyboard::Up)
+	{
+		cout << "keyboard up" << endl;
 		SpeedUp();
+	}
 	if (keyboard_result_code == Keyboard::Down)
+	{
+		cout << "keyboard down" << endl;
 		SpeedDown();
+	}
 	if (keyboard_result_code == Keyboard::Left)
-		if (_current_speed != 0)  _dir_alpha += 0.1;
+		if (!zeroVelocity())  _dir_alpha += 0.1;
 	if (keyboard_result_code == Keyboard::Right)
-		if (_current_speed != 0)  _dir_alpha -= 0.1;
+		if (!zeroVelocity())  _dir_alpha -= 0.1;
 
 
 }
 
-void Car::makeFriction(float friction)
+void Car::makeFriction()
 {
-	if (_current_speed > friction) _current_speed -= friction;
+	if (!zeroVelocity()) {
+		if (_velocity.x >= _friction) { _velocity.x -= _friction; cout << "x friction" << endl; }
+		if (_velocity.y >= _friction) { _velocity.y -= _friction; cout << "y friction" << endl; }
+	}
 }
 
-void Car::updateCurrentSpeed()
+
+void Car::updateSpriteByPosition()
 {
-	_velocity.x = cos(_dir_alpha) * _current_speed;
-	_velocity.y = -sin(_dir_alpha) * _current_speed;
-
-	_current_speed = sqrt(pow(_velocity.x, 2) + pow(_velocity.y, 2));
-	if (_current_speed < 0.1) _current_speed = 0;
+	_sprite.setPosition(_position.x, _position.y);
+	_sprite.setRotation(-_dir_alpha*180 / M_PI);
 }
 
-void Car::moveBall(float time_passed, Vector2f v0)
+void Car::moveBall(Vector2f v0)
 {
-	_position.x += Helper::getMetersTraveledForTime(time_passed, v0.x, _velocity.x);
-	_position.y += Helper::getMetersTraveledForTime(time_passed, v0.y, _velocity.y);
+	//cout << "v0.x: " << v0.x << " v0.y: " << v0.y << ". Current velocity: x " << _velocity.x << ", y: " << _velocity.y << endl;
+	_position.x += _velocity.x;//Helper::getMetersTraveledForLoopCycle( v0.x, _velocity.x);
+	_position.y += _velocity.y; //Helper::getMetersTraveledForLoopCycle(v0.y, _velocity.y);
+	updateSpriteByPosition();
 }
 
-Vector2f Car::getCurrentSpeed()
+float Car::getCurrentSpeedAproximately()
+{
+	return sqrt(pow(_velocity.x,2) + pow(_velocity.y, 2));
+}
+
+Vector2f Car::getCurrentVelocity()
 {
 	return _velocity;
 }

@@ -19,7 +19,11 @@ void GameEngine::openRelevantGame()
 	{	
 		CarsGame c(_width = 640, _height = 480);
 		RenderWindow r(VideoMode(_width, _height), "Cars racing (top down)");
-		Sprite background(Helper::loadTextureFromFile("images/background.png"));
+		
+		Texture t = Helper::loadTextureFromFile("images/background.png");
+		Sprite background;
+		background.setTexture(t);
+		
 		c.mainGameLoop(r,background);
 	}
 }

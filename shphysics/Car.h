@@ -4,7 +4,7 @@
 
 class Car {
 public:
-	Car(String path, Vector2f position, float dir_alpha, float max_speed, float acceleration);
+	Car(String path, Vector2f position, float dir_alpha, float max_speed, float acceleration, float friction);
 	Car();
 	~Car();
 
@@ -12,15 +12,14 @@ public:
 	void changeCarsSpeed(int keyboard_result_code);
 
 	// Deaccelerates the speed
-	void makeFriction(float friction);
-
-	// Updates dx(x speed), dy(y speed) and current speed
-	void updateCurrentSpeed();
+	void makeFriction();
 
 	// Increases x, y using dx,dy
-	void moveBall(float time_passed, Vector2f v0);
+	void moveBall(Vector2f v0);
 
-	Vector2f getCurrentSpeed();
+	float getCurrentSpeedAproximately();
+
+	Vector2f getCurrentVelocity();
 
 	bool carStopped();
 
@@ -32,14 +31,17 @@ public:
 
 	Sprite getSprite();
 
-private:
+	void updateSpriteByPosition();
 
+private:
+	Texture _texture;
 	Sprite _sprite;
 
 	Vector2f _velocity; // dx, dy
 	Vector2f _position; // x, y
-	float _current_speed; // sqrt(dx^2 + dy^2)
 	float _acceleration; // d(current_speed) Constant
+	float _friction;
+
 
 	float _meters_traveled; // += v0t + at^2/2
 	float _dir_alpha; // -pai < dir < pai
@@ -56,4 +58,11 @@ private:
 
 	void SpeedDown();
 
+	void updateVelocityUp();
+
+	void updateVelocityDown();
+
+	bool zeroVelocity();
+
+	bool shouldAccelerate();
 };
